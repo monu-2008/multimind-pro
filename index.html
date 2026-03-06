@@ -1423,6 +1423,7 @@ function fbErr(code) {
 //  THREE.JS — 3D INTRO ANIMATION
 // ════════════════════════════════════════════════
 (function() {
+  try {
   const canvas = document.getElementById('three-canvas');
   const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
   renderer.setPixelRatio(window.devicePixelRatio);
@@ -1489,14 +1490,39 @@ function fbErr(code) {
     renderer.render(scene, camera);
   }
   animate();
-  window._stopIntro = () => {}; // placeholder
+  window._stopIntro = () => {};
 
   window.addEventListener('resize', () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
     camera.aspect = window.innerWidth/window.innerHeight;
     camera.updateProjectionMatrix();
   });
+  } catch(e) { console.warn('Three.js error:', e); }
 })();
+
+// ════════════════════════════════════════════════
+//  ENTER APP — must be on window for onclick
+// ════════════════════════════════════════════════
+window.enterApp = function() {
+  try {
+    const intro = document.getElementById('intro');
+    const app   = document.getElementById('app');
+    intro.classList.add('exit');
+    setTimeout(() => {
+      intro.style.display = 'none';
+      app.classList.add('visible');
+      try { initBgCanvas(); } catch(e) {}
+      try { renderModels(); } catch(e) {}
+      try { renderAccounts(); } catch(e) {}
+      try { showLogin(); } catch(e) {}
+    }, 800);
+  } catch(e) {
+    document.getElementById('intro').style.display = 'none';
+    document.getElementById('app').classList.add('visible');
+    document.getElementById('app').style.display = 'flex';
+    try { showLogin(); } catch(e2) {}
+  }
+};
 
 // BG canvas particles for app
 function initBgCanvas() {
@@ -1541,29 +1567,6 @@ document.addEventListener('mousemove', e => {
 // ════════════════════════════════════════════════
 //  ENTER APP
 // ════════════════════════════════════════════════
-function enterApp() {
-  try {
-    const intro = document.getElementById('intro');
-    const app   = document.getElementById('app');
-    if (!intro || !app) { console.error('Elements missing'); return; }
-
-    intro.classList.add('exit');
-    setTimeout(() => {
-      intro.style.display = 'none';
-      app.classList.add('visible');
-      try { initBgCanvas(); } catch(e) { console.warn('bgCanvas:', e); }
-      try { renderModels(); } catch(e) { console.warn('models:', e); }
-      try { renderAccounts(); } catch(e) { console.warn('accounts:', e); }
-      try { showLogin(); } catch(e) { console.warn('login:', e); }
-    }, 800);
-  } catch(e) {
-    // Fallback — direct show
-    document.getElementById('intro').style.display = 'none';
-    document.getElementById('app').style.display = 'flex';
-    document.getElementById('app').classList.add('visible');
-    showLogin();
-  }
-}
 
 // ════════════════════════════════════════════════
 //  AUTH / SCREENS
