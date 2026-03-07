@@ -1119,7 +1119,7 @@ body {
   <div class="intro-content">
     <div class="intro-logo">MULTIMIND</div>
     <div class="intro-sub">// <span>8 AI MODELS</span> · REAL-TIME COMPARISON · <span>NEURAL ENGINE</span></div>
-    <button class="enter-btn" onclick="enterApp()"><span>⚡ ENTER SYSTEM</span></button>
+    <button class="enter-btn" onclick="window.enterApp()"><span>⚡ ENTER SYSTEM</span></button>
   </div>
 </div>
 
@@ -1383,7 +1383,7 @@ window.doLogout = async () => {
 };
 
 let pollT;
-function startPoll(user) {
+window.startPoll = function(user) {
   clearInterval(pollT);
   pollT = setInterval(async ()=>{
     await user.reload();
@@ -1396,7 +1396,7 @@ onAuthStateChanged(auth, user => {
   else if (!user && document.getElementById('app').classList.contains('visible')) showLogin();
 });
 
-function handleLogin(user) {
+window.handleLogin = function(user) {
   clearInterval(pollT);
   const name = user.displayName || user.email.split('@')[0];
   document.getElementById('userName').textContent = name;
@@ -1407,12 +1407,12 @@ function handleLogin(user) {
   loadHistory();
 }
 
-function setAuthLoad(on) {
+window.setAuthLoad = function(on) {
   document.getElementById('authBtn').disabled = on;
   document.getElementById('authBtnIco').innerHTML = on ? '<span class="spin" style="border-top-color:#000"></span>' : '→';
 }
 
-function fbErr(code) {
+window.fbErr = function(code) {
   const m = { 'auth/email-already-in-use':'Email pehle se registered hai','auth/invalid-email':'Email galat hai','auth/weak-password':'Password zyada strong banao','auth/user-not-found':'User nahi mila','auth/wrong-password':'Password galat hai','auth/invalid-credential':'Email ya password galat hai','auth/too-many-requests':'Bahut attempts. Baad mein try karo','auth/popup-closed-by-user':'Popup band ho gaya','auth/network-request-failed':'Internet check karo' };
   return m[code] || 'Error: '+code;
 }
@@ -1525,7 +1525,7 @@ window.enterApp = function() {
 };
 
 // BG canvas particles for app
-function initBgCanvas() {
+window.initBgCanvas = function() {
   const canvas = document.getElementById('bgCanvas');
   const ctx = canvas.getContext('2d');
   canvas.width = window.innerWidth;
@@ -1572,7 +1572,7 @@ document.addEventListener('mousemove', e => {
 //  AUTH / SCREENS
 // ════════════════════════════════════════════════
 let authTab = 'si';
-function switchTab(t) {
+window.switchTab = function(t) {
   authTab = t;
   document.getElementById('tab-si').classList.toggle('active', t==='si');
   document.getElementById('tab-su').classList.toggle('active', t==='su');
@@ -1580,13 +1580,13 @@ function switchTab(t) {
   document.getElementById('authBtnTxt').textContent = t==='si'?'SIGN IN':'SIGN UP';
   document.getElementById('forgotLnk').style.display = t==='si'?'block':'none';
 }
-function handleAuth() { if(authTab==='si') signInEmail(); else signUpEmail(); }
-function showLogin()  { document.getElementById('loginScreen').classList.remove('hidden'); document.getElementById('verifyScreen').classList.add('hidden'); }
-function hideLogin()  { document.getElementById('loginScreen').classList.add('hidden'); }
-function showVerify() { document.getElementById('verifyScreen').classList.remove('hidden'); document.getElementById('loginScreen').classList.add('hidden'); }
-function hideVerify() { document.getElementById('verifyScreen').classList.add('hidden'); }
-function guestLogin() { hideLogin(); showToast('Guest mode — history save nahi hogi', 'warning'); }
-function toggleUserDD() {
+window.handleAuth = function() { if(authTab==='si') signInEmail(); else signUpEmail(); }
+window.showLogin = function()  { document.getElementById('loginScreen').classList.remove('hidden'); document.getElementById('verifyScreen').classList.add('hidden'); }
+window.hideLogin = function()  { document.getElementById('loginScreen').classList.add('hidden'); }
+window.showVerify = function() { document.getElementById('verifyScreen').classList.remove('hidden'); document.getElementById('loginScreen').classList.add('hidden'); }
+window.hideVerify = function() { document.getElementById('verifyScreen').classList.add('hidden'); }
+window.guestLogin = function() { hideLogin(); showToast('Guest mode — history save nahi hogi', 'warning'); }
+window.toggleUserDD = function() {
   const dd = document.getElementById('userDD');
   dd.classList.toggle('open');
 }
@@ -1610,12 +1610,12 @@ const AI_ACCOUNTS = [
 ];
 
 let accVisible = true;
-function toggleAccSection() {
+window.toggleAccSection = function() {
   accVisible = !accVisible;
   document.getElementById('accGrid').style.display = accVisible ? 'grid' : 'none';
 }
 
-function renderAccounts() {
+window.renderAccounts = function() {
   const grid = document.getElementById('accGrid');
   grid.innerHTML = '';
   AI_ACCOUNTS.forEach(ac => {
@@ -1658,7 +1658,7 @@ function renderAccounts() {
   updateModelDots();
 }
 
-function saveAccKey(id) {
+window.saveAccKey = function(id) {
   const val = document.getElementById('ackey-'+id)?.value.trim();
   if (!val) return showToast('Key dalo pehle', 'error');
   localStorage.setItem('mm_'+id, val);
@@ -1667,19 +1667,19 @@ function saveAccKey(id) {
   updateModelDots();
 }
 
-function disconnectAcc(id) {
+window.disconnectAcc = function(id) {
   localStorage.removeItem('mm_'+id);
   renderAccounts();
   showToast(`${id} disconnect ho gaya`, 'info');
   updateModelDots();
 }
 
-function oauthConnect(id) {
+window.oauthConnect = function(id) {
   // For Google — open real OAuth
   showToast('API key use karo Google ke liye — OAuth jald aa raha hai!', 'info');
 }
 
-function updateModelDots() {
+window.updateModelDots = function() {
   // Map model id to api key id
   const keyMap = { chatgpt:'openai', claude:'anthropic', gemini:'google', llama:'groq', mistral:'mistral', grok:'xai', perplexity:'perplexity', blackbox:'groq' };
   MODELS.forEach(m => {
@@ -1719,7 +1719,7 @@ const PERSONAS = {
 let selectedModels = new Set(['chatgpt','claude','gemini']);
 let results = {}, forCmp = new Set(), chatHistory = [];
 
-function renderModels() {
+window.renderModels = function() {
   const row = document.getElementById('modelsRow');
   row.innerHTML = '';
   MODELS.forEach(m => {
@@ -1746,7 +1746,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if(ta){ ta.addEventListener('input',()=>document.getElementById('charCount').textContent=`${ta.value.length} chars · Ctrl+Enter`); ta.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='Enter')runQuery();}); }
 });
 
-async function runQuery() {
+window.runQuery = async function() {
   const prompt = document.getElementById('promptTA').value.trim();
   if (!prompt) return showToast('Prompt likho!','error');
   if (!selectedModels.size) return showToast('Ek model select karo','error');
@@ -1818,7 +1818,7 @@ const KEY_MAP = { chatgpt:'openai', claude:'anthropic', gemini:'google', llama:'
 const API_URLS = { openai:'https://api.openai.com/v1/chat/completions', groq:'https://api.groq.com/openai/v1/chat/completions', mistral:'https://api.mistral.ai/v1/chat/completions', xai:'https://api.x.ai/v1/chat/completions', perplexity:'https://api.perplexity.ai/chat/completions' };
 const MODEL_NAMES = { chatgpt:'gpt-4o', gemini:'gemini-1.5-pro', llama:'llama3-70b-8192', blackbox:'mixtral-8x7b-32768', mistral:'mistral-large-latest', grok:'grok-2-latest', perplexity:'llama-3.1-sonar-large-128k-online' };
 
-async function fetchOne(mid, prompt) {
+window.fetchOne = async function(mid, prompt) {
   const t0 = Date.now();
   try {
     let text;
@@ -1878,19 +1878,19 @@ async function fetchOne(mid, prompt) {
   }
 }
 
-function copyRes(mid){
+window.copyRes = function(mid){
   navigator.clipboard.writeText(results[mid]?.text||'').then(()=>{
     const b=document.getElementById('cp-'+mid); b.textContent='✓ Copied!';
     setTimeout(()=>b.textContent='📋 Copy',1500);
   });
 }
-function toggleSel(mid){
+window.toggleSel = function(mid){
   const b=document.getElementById('sl-'+mid);
   if(forCmp.has(mid)){forCmp.delete(mid);b.classList.remove('chosen');b.textContent='+ Compare';}
   else{forCmp.add(mid);b.classList.add('chosen');b.textContent='✓ Selected';}
   updateCmpBar();
 }
-function updateCmpBar(){
+window.updateCmpBar = function(){
   const n=forCmp.size;
   document.getElementById('cmpBar').classList.toggle('show',n>=2);
   if(n>=2)document.getElementById('cmpCount').textContent=n;
@@ -1899,7 +1899,7 @@ function updateCmpBar(){
 // ════════════════════════════════════════════════
 //  COMPARE
 // ════════════════════════════════════════════════
-function openCompare(){
+window.openCompare = function(){
   if(forCmp.size<2) return showToast('Kam se kam 2 select karo','error');
   const prompt=document.getElementById('promptTA').value.trim();
   const list=[...forCmp];
@@ -1940,16 +1940,16 @@ function openCompare(){
   });
   document.getElementById('compareOverlay').classList.add('show');
 }
-function closeCompare(){ document.getElementById('compareOverlay').classList.remove('show'); }
-function copyTxt(mid){ navigator.clipboard.writeText(results[mid]?.text||'').then(()=>showToast('Copied!','success')); }
-function escHtml(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');}
+window.closeCompare = function(){ document.getElementById('compareOverlay').classList.remove('show'); }
+window.copyTxt = function(mid){ navigator.clipboard.writeText(results[mid]?.text||'').then(()=>showToast('Copied!','success')); }
+window.escHtml = function(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');}
 
 // ════════════════════════════════════════════════
 //  HISTORY
 // ════════════════════════════════════════════════
-function saveHistory(){try{localStorage.setItem('mm_hist',JSON.stringify(chatHistory.slice(0,50)));}catch(e){}}
-function loadHistory(){try{const h=localStorage.getItem('mm_hist');if(h)chatHistory=JSON.parse(h);}catch(e){}renderHistory();}
-function renderHistory(){
+window.saveHistory = function(){try{localStorage.setItem('mm_hist',JSON.stringify(chatHistory.slice(0,50)));}catch(e){}}
+window.loadHistory = function(){try{const h=localStorage.getItem('mm_hist');if(h)chatHistory=JSON.parse(h);}catch(e){}renderHistory();}
+window.renderHistory = function(){
   const b=document.getElementById('hBody');
   if(!chatHistory.length){b.innerHTML='<div style="text-align:center;padding:40px 16px;color:var(--muted);font-family:\'JetBrains Mono\',monospace;font-size:12px">No history yet.<br>Run queries to see them here.</div>';return;}
   b.innerHTML=chatHistory.slice(0,30).map(e=>`
@@ -1959,7 +1959,7 @@ function renderHistory(){
       <div class="h-ts">🕐 ${e.ts}</div>
     </div>`).join('');
 }
-function loadHist(id){
+window.loadHist = function(id){
   const e=chatHistory.find(x=>x.id===id);if(!e)return;
   document.getElementById('promptTA').value=e.prompt;
   results={...e.results};forCmp.clear();updateCmpBar();
@@ -1984,10 +1984,10 @@ function loadHist(id){
   });
   closeHistory();
 }
-function openHistory(){document.getElementById('hDrawer').classList.add('open');document.getElementById('hOverlay').classList.add('open');}
-function closeHistory(){document.getElementById('hDrawer').classList.remove('open');document.getElementById('hOverlay').classList.remove('open');}
+window.openHistory = function(){document.getElementById('hDrawer').classList.add('open');document.getElementById('hOverlay').classList.add('open');}
+window.closeHistory = function(){document.getElementById('hDrawer').classList.remove('open');document.getElementById('hOverlay').classList.remove('open');}
 
-function clearAll(){
+window.clearAll = function(){
   document.getElementById('resultsGrid').innerHTML='';
   document.getElementById('emptyState').style.display='block';
   document.getElementById('resHead').style.display='none';
@@ -2004,20 +2004,20 @@ function clearAll(){
 // ════════════════════════════════════════════════
 let uploadedImages = []; // [{base64, mimeType, name}]
 
-function handleDragOver(e) {
+window.handleDragOver = function(e) {
   e.preventDefault();
   document.getElementById('imgUploadZone').classList.add('dragover');
 }
-function handleDragLeave(e) {
+window.handleDragLeave = function(e) {
   document.getElementById('imgUploadZone').classList.remove('dragover');
 }
-function handleDrop(e) {
+window.handleDrop = function(e) {
   e.preventDefault();
   document.getElementById('imgUploadZone').classList.remove('dragover');
   handleImgFiles(e.dataTransfer.files);
 }
 
-function handleImgFiles(files) {
+window.handleImgFiles = function(files) {
   if (!files || !files.length) return;
   const allowed = ['image/jpeg','image/png','image/gif','image/webp'];
   Array.from(files).forEach(file => {
@@ -2033,7 +2033,7 @@ function handleImgFiles(files) {
   });
 }
 
-function renderImagePreviews() {
+window.renderImagePreviews = function() {
   const strip = document.getElementById('imgPreviewStrip');
   const zone  = document.getElementById('imgUploadZone');
   const badge = document.getElementById('imgCountBadge');
@@ -2061,12 +2061,12 @@ function renderImagePreviews() {
     </div>`).join('');
 }
 
-function removeImage(i) {
+window.removeImage = function(i) {
   uploadedImages.splice(i, 1);
   renderImagePreviews();
 }
 
-function clearImages() {
+window.clearImages = function() {
   uploadedImages = [];
   document.getElementById('imgFileIn').value = '';
   renderImagePreviews();
@@ -2074,7 +2074,7 @@ function clearImages() {
 }
 
 // Build message content with images for API calls
-function buildContent(prompt) {
+window.buildContent = function(prompt) {
   if (!uploadedImages.length) return prompt;
   // For Claude — multi-modal content array
   const content = uploadedImages.map(img => ({
@@ -2086,7 +2086,7 @@ function buildContent(prompt) {
 }
 
 // Build OpenAI-format content with images
-function buildOpenAIContent(prompt) {
+window.buildOpenAIContent = function(prompt) {
   if (!uploadedImages.length) return prompt;
   const content = uploadedImages.map(img => ({
     type: 'image_url',
@@ -2097,7 +2097,7 @@ function buildOpenAIContent(prompt) {
 }
 
 // Build Gemini-format content with images
-function buildGeminiParts(prompt) {
+window.buildGeminiParts = function(prompt) {
   const parts = uploadedImages.map(img => ({
     inline_data: { mime_type: img.mimeType, data: img.base64 }
   }));
@@ -2108,10 +2108,10 @@ function buildGeminiParts(prompt) {
 // Vision model support check
 const VISION_MODELS = { chatgpt: 'gpt-4o', claude: true, gemini: true, llama: false, mistral: false, grok: 'grok-2-vision-latest', perplexity: false, blackbox: false };
 
-function modelSupportsVision(mid) { return !!VISION_MODELS[mid]; }
+window.modelSupportsVision = function(mid) { return !!VISION_MODELS[mid]; }
 
 
-function showToast(msg,type='info'){
+window.showToast = function(msg,type='info'){
   const c=document.getElementById('toastWrap');
   const t=document.createElement('div');
   t.className=`toast t-${type}`;t.textContent=msg;
@@ -2144,7 +2144,7 @@ let pwEntry = '';
 const PW_LENGTH = ADMIN_PASSWORD.length;
 
 // ── Show admin (open password screen) ────────
-function showAdminWelcome() {
+window.showAdminWelcome = function() {
   pwEntry = '';
   document.getElementById('pwError').textContent = '';
   document.getElementById('adminPassCard').style.display = 'block';
@@ -2157,7 +2157,7 @@ function showAdminWelcome() {
 }
 
 // ── Build numpad ──────────────────────────────
-function buildNumPad() {
+window.buildNumPad = function() {
   const pad = document.getElementById('numPad');
   pad.innerHTML = '';
   // Shuffle numbers for security feel
@@ -2182,7 +2182,7 @@ function buildNumPad() {
 }
 
 // ── Render password dots ──────────────────────
-function renderPwDots() {
+window.renderPwDots = function() {
   const container = document.getElementById('pwDots');
   container.innerHTML = '';
   for (let i = 0; i < PW_LENGTH; i++) {
@@ -2193,7 +2193,7 @@ function renderPwDots() {
 }
 
 // ── Check password ────────────────────────────
-function checkPassword() {
+window.checkPassword = function() {
   if (pwEntry === ADMIN_PASSWORD) {
     // ✅ CORRECT — show welcome
     if (matrixAnimFrame) { cancelAnimationFrame(matrixAnimFrame); matrixAnimFrame = null; }
@@ -2235,7 +2235,7 @@ function checkPassword() {
 }
 
 // ── Close overlay ─────────────────────────────
-function closeAdminWelcome() {
+window.closeAdminWelcome = function() {
   const overlay = document.getElementById('adminOverlay');
   overlay.style.transition = 'opacity 0.4s';
   overlay.style.opacity = '0';
@@ -2251,7 +2251,7 @@ function closeAdminWelcome() {
 }
 
 // ── Typing animation ──────────────────────────
-function typeAdminMsg(msg) {
+window.typeAdminMsg = function(msg) {
   const el = document.getElementById('adminTypingMsg');
   el.innerHTML = '<span class="typing-cursor"></span>';
   let i = 0;
@@ -2265,7 +2265,7 @@ function typeAdminMsg(msg) {
 }
 
 // ── Matrix rain ───────────────────────────────
-function startMatrixRain(canvasId, cardId) {
+window.startMatrixRain = function(canvasId, cardId) {
   const canvas = document.getElementById(canvasId);
   const card   = document.getElementById(cardId);
   if (!canvas || !card) return;
@@ -2292,7 +2292,7 @@ function startMatrixRain(canvasId, cardId) {
 }
 
 // ── Particle burst ────────────────────────────
-function burstParticles() {
+window.burstParticles = function() {
   const btn = document.getElementById('secretBtn');
   if (!btn) return;
   const r = btn.getBoundingClientRect();
