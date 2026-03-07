@@ -1119,7 +1119,7 @@ body {
   <div class="intro-content">
     <div class="intro-logo">MULTIMIND</div>
     <div class="intro-sub">// <span>8 AI MODELS</span> · REAL-TIME COMPARISON · <span>NEURAL ENGINE</span></div>
-    <button class="enter-btn" onclick="window.enterApp()"><span>⚡ ENTER SYSTEM</span></button>
+    <button class="enter-btn" onclick="(function(){document.getElementById('intro').style.display='none';var a=document.getElementById('app');a.style.display='flex';a.classList.add('visible');setTimeout(function(){if(window.showLogin)window.showLogin();if(window.renderModels)window.renderModels();if(window.renderAccounts)window.renderAccounts();if(window.initBgCanvas)window.initBgCanvas();},100);})()"><span>⚡ ENTER SYSTEM</span></button>
   </div>
 </div>
 
